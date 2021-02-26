@@ -238,6 +238,12 @@ def _r_functiondef(fun, node, flags):
         and node.parent.type == syms.classdef
         and "staticmethod" not in pyi_method_decorators
     )
+    if len(pyi_decorators) > 0 and (
+            pyi_decorators[0].endswith(".setter") or
+            pyi_decorators[0].endswith(".deleter") or
+            pyi_decorators[0] == "overload"):
+        print("skip setter")
+        return []
     args, returns = get_function_signature(fun, is_method=is_method)
     for child in flatten_some(node.children):
         decorators = None
